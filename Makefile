@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-Wall -MMD
+CXXFLAGS=-std=c++20 -Wall -MMD
 INCLUDEFLAGS=
 EXEC=akasugi
 OBJECTS=src/main.cc

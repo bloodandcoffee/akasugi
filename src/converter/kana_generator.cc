@@ -1,11 +1,11 @@
 #include <string>
 #include "kana.h"
-#include "romaji_parser.h"
+#include "kana_generator.h"
 using namespace std;
 
 void RomajiParser::addPath(State& state, string str, const Kana* output) {
     // If str is empty, mark as accepting state and return
-    if(str.length() == 0) {
+    if(str.length() == 0) { 
         state.type = Accepting;
         state.output = output;
         return;

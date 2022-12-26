@@ -1,12 +1,11 @@
 CXX=g++
 CXXFLAGS=-std=c++20 -Wall -MMD
-INCLUDEFLAGS=
 EXEC=akasugi
-OBJECTS=src/main.cc
+OBJECTS=src/main.o
 DEPENDS=${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}
-	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC} ${INCLUDEFLAGS}
+	${CXX} ${CXXFLAGS} ${OBJECTS} -o ${EXEC}
 
 -include ${DEPENDS}
 

@@ -5,21 +5,23 @@
 #include "kana.h"
 
 class RomajiParser {
-    enum StateType {Start, Normal, Accepting};
-
     struct State {
-        StateType type;
-        const Kana* output;
-        std::map<char, State&> transitions;
+        const Kana* value;
+        std::map<char, State&> children;
 
-        State(StateType type, const Kana* output) : type{type}, output{output} {};
+        State(const Kana* value) : value{value} {};
+        ~State();
     };
 
-    static std::vector<State> states;
-    static void addPath(State&, std::string, const Kana*);
+    static State startState;
+    static State& currentState;
+    static State& addStates(State& state, std::string transitions, const Kana* value);
 
     public:
     static void init();
+    static bool consumeChar(char c);
+    static bool isLeaf();
+    static const Kana* getValue();
 };
 
 #endif

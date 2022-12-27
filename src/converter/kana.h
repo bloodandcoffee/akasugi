@@ -8,7 +8,7 @@ struct Kana {
     std::string katakana;
 };
 
-struct Symbol {
+struct Mapping {
     std::string romaji;
     const Kana* kana;
 };
@@ -152,7 +152,7 @@ const Kana youon[] = {
     {"ぴょ", "ピュ"}
 };
 
-const Kana combining[] = {
+const Kana combination[] = {
     {"ふぁ", "ファ"},
     {"ゔぁ", "ヴァ"},
     {"つぁ", "ツァ"},
@@ -199,7 +199,7 @@ const Kana chiisai[] = {
     {"ゖ", "ヶ"}
 };
 
-static const Symbol kana[] = {
+const Mapping kana[] = {
     // Normal Kana
     {"a", &standard[0]},
     {"i", &standard[1]},
@@ -342,59 +342,52 @@ static const Symbol kana[] = {
     {"pyo", &youon[32]},
 
     // Other chiisai kana
-    {"fa", &combining[0]},
-    {"va", &combining[1]},
-    {"tsa", &combining[2]},
+    {"fa", &combination[0]},
+    {"va", &combination[1]},
+    {"tsa", &combination[2]},
 
-    {"fi", &combining[3]},
-    {"vi", &combining[4]},
-    {"tsi", &combining[5]},
-    {"si", &combining[6]},
-    {"zi", &combining[7]},
-    {"ti", &combining[8]},
-    {"di", &combining[9]},
+    {"fi", &combination[3]},
+    {"vi", &combination[4]},
+    {"tsi", &combination[5]},
+    {"si", &combination[6]},
+    {"zi", &combination[7]},
+    {"ti", &combination[8]},
+    {"di", &combination[9]},
 
-    {"tu", &combining[10]},
-    {"du", &combining[11]},
+    {"tu", &combination[10]},
+    {"du", &combination[11]},
  
-    {"fe", &combining[12]},
-    {"ve", &combining[13]},
-    {"she", &combining[14]},
-    {"je", &combining[15]},
-    {"che", &combining[16]},
-    {"tse", &combining[17]},
+    {"fe", &combination[12]},
+    {"ve", &combination[13]},
+    {"she", &combination[14]},
+    {"je", &combination[15]},
+    {"che", &combination[16]},
+    {"tse", &combination[17]},
 
-    {"fo", &combining[18]},
-    {"vo", &combining[19]},
-    {"tso", &combining[20]},
+    {"fo", &combination[18]},
+    {"vo", &combination[19]},
+    {"tso", &combination[20]},
 
-    {"kwa", &combining[21]},
-    {"kwi", &combining[22]},
-    {"kwe", &combining[23]},
+    {"kwa", &combination[21]},
+    {"kwi", &combination[22]},
+    {"kwe", &combination[23]},
 
-    {"gwa", &combining[24]},
-    {"gwi", &combining[25]},
-    {"gwe", &combining[26]},
+    {"gwa", &combination[24]},
+    {"gwi", &combination[25]},
+    {"gwe", &combination[26]}
+};
 
-    {"xa", &chiisai[0]},
-    {"xi", &chiisai[1]},
-    {"xu", &chiisai[2]},
-    {"xe", &chiisai[3]},
-    {"xo", &chiisai[4]},
-    {"xwa", &chiisai[5]},
-    {"xtsu", &chiisai[6]},
-    {"xka", &chiisai[7]},
-    {"xke", &chiisai[8]},
-
-    {"la", &chiisai[0]},
-    {"li", &chiisai[1]},
-    {"lu", &chiisai[2]},
-    {"le", &chiisai[3]},
-    {"lo", &chiisai[4]},
-    {"lwa", &chiisai[5]},
-    {"ltsu", &chiisai[6]},
-    {"lka", &chiisai[7]},
-    {"lke", &chiisai[8]}
+// x/l + kana = chiisai
+const Mapping chiisaiKana[] = {
+    {"a", &chiisai[0]},
+    {"i", &chiisai[1]},
+    {"u", &chiisai[2]},
+    {"e", &chiisai[3]},
+    {"o", &chiisai[4]},
+    {"wa", &chiisai[5]},
+    {"tsu", &chiisai[6]},
+    {"ka", &chiisai[7]},
+    {"ke", &chiisai[8]}
 };
 
 #endif

@@ -1,6 +1,5 @@
 #ifndef KANA_H
 #define KANA_H
-#define KANA_COUNT 155
 #include <string>
 
 struct Kana {

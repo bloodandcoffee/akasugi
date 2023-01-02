@@ -1,5 +1,7 @@
 #include <iostream>
+#include <sstream>
 #include <string>
+#include "converter/kana_generator.h"
 using namespace std;
 
 // This file is currently a test harness for the
@@ -8,9 +10,18 @@ using namespace std;
 int main() {
 
     string input;
+    RomajiParser::init();
 
-    while(cin >> input) {
-        cout << "Konnichiwa, Sekai!" << endl;
+    getline(cin, input);
+
+    for(int i = 0; i < input.length(); i++) {
+        cout << "Char consumed: " << input[i] << "; Status: " << (RomajiParser::consumeChar(input[i]) ? "Valid;" : "Invalid;") << endl;
+        bool isl = RomajiParser::isLeaf();
+        cout << (isl ? "Is Leaf" : "Not Leaf") << endl;
+        const Kana* uwu = RomajiParser::getValue();
+        cout << (uwu == nullptr ? "nullptr" : uwu->hiragana) << endl;
+
+        if(isl) RomajiParser::reset();
     }
 
     return 0;

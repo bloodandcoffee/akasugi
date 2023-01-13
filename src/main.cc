@@ -15,10 +15,11 @@ int main() {
     getline(cin, input);
 
     for(int i = 0; i < input.length(); i++) {
-        cout << "Char consumed: " << input[i] << "; Status: " << (RomajiParser::consumeChar(input[i]) ? "Valid;" : "Invalid;") << endl;
         bool isl = RomajiParser::isLeaf();
-        cout << (isl ? "Is Leaf" : "Not Leaf") << endl;
         const Kana* uwu = RomajiParser::getValue();
+
+        cout << "Char consumed: " << input[i] << "; Status: " << (RomajiParser::consumeChar(input[i]) ? "Valid;" : "Invalid;") << endl;
+        cout << (isl ? "Is Leaf" : "Not Leaf") << endl;
         cout << (uwu == nullptr ? "nullptr" : uwu->hiragana) << endl;
 
         if(isl) RomajiParser::reset();

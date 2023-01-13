@@ -1,22 +1,29 @@
-//g++ -levdev keycapture.cc
+//g++ -I /usr/include/libevdev-1.0 -levdev keycapture.cc -o keycap.cc
 #include <fcntl.h>
 #include <unistd.h>
-#include <libevdev-1.0/libevdev/libevdev.h>
+#include <libevdev/libevdev.h>
 
 #include <iostream>
 using namespace std;;
 
 int main() {
 
-    char* device = "/dev/input/event4";
+    char* device = "/dev/input/event22";
     int fd = open(device, O_RDONLY);
 
-    struct libevdev* dev;
-    libevdev_new_from_fd(fd, &dev);
-    libevdev_grab(dev, LIBEVDEV_GRAB);
+    libevdev* dev;
+    if(libevdev_new_from_fd(fd, &dev) != 0) {
+        cerr << "Error creating libevdev device" << endl;
+        return 69;
+    }
+    
+    if(libevdev_grab(dev, LIBEVDEV_GRAB) != 0) {
+        cerr << "Grab failed" << endl;
+        return 69;
+    }
 
     for(int i = 0; i < 100; i++) {
-        struct input_event input;
+        input_event input;
         int rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, &input);
 
         while (rc == LIBEVDEV_READ_STATUS_SYNC)

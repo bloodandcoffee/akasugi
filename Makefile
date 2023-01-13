@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++20 -Wall -MMD
+CXXFLAGS=-std=c++20 -Wall -MMD -O2 -mtune=znver3
 EXEC=akasugi
 OBJECTS=src/main.o src/converter/kana_generator.o
 DEPENDS=${OBJECTS:.o=.d}

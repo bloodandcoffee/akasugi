@@ -1,9 +1,9 @@
 //g++ -I /usr/include/libevdev-1.0 -levdev keycapture.cc -o keycap.cc
 #include <fcntl.h>
 #include <unistd.h>
-#include <libevdev/libevdev.h>
-
 #include <iostream>
+
+#include <libevdev/libevdev.h>
 using namespace std;;
 
 int main() {

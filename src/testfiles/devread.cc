@@ -6,24 +6,9 @@
 #include <libevdev/libevdev.h>
 using namespace std;
 
-const char* event_types[] = {
-    "EV_SYN",
-    "EV_KEY",
-    "EV_REL",
-    "EV_ABS",
-    "EV_MSC",
-    "EV_SW",
-    "EV_LED",
-    "EV_SND",
-    "EV_REP",
-    "EV_FF",
-    "EV_PWR",
-    "EV_FF_STATUS"
-};
-
 int main() {
 
-    char* device = "/dev/input/event3";
+    char* device = "/dev/input/event4";
     int fd = open(device, O_RDONLY);
 
     libevdev* dev;
@@ -43,8 +28,20 @@ int main() {
     cout << "Events: " << EV_MAX << endl;
     for(int evType = 0; evType < EV_MAX; evType++) {
         const char* typeName = libevdev_event_type_get_name(evType);
-        if(typeName != NULL) cout << typeName << " " << libevdev_event_type_get_max(evType) << endl;
-        else cout << evType << endl;
+        int typeMax = libevdev_event_type_get_max(evType);
+
+        if(typeMax < 0 || typeName == NULL) continue;
+        
+        cout << typeName << endl;
+
+        for(int evCode = 0; evCode < typeMax; evCode++) {
+            if(libevdev_has_event_code(dev, evType, evCode)) {
+                const char* codeName = libevdev_event_code_get_name(evType, evCode);
+                
+                if(codeName == NULL) continue;
+                cout << "\t" << codeName << endl;
+            }
+        }
     }
 
     libevdev_free(dev);

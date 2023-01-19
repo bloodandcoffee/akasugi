@@ -30,7 +30,10 @@ int main() {
         const char* typeName = libevdev_event_type_get_name(evType);
         int typeMax = libevdev_event_type_get_max(evType);
 
-        if(typeMax < 0 || typeName == NULL) continue;
+        if(typeMax < 0) {
+            cout << evType << " " << typeMax << endl;
+            continue;
+        }
         
         cout << typeName << endl;
 
@@ -38,8 +41,8 @@ int main() {
             if(libevdev_has_event_code(dev, evType, evCode)) {
                 const char* codeName = libevdev_event_code_get_name(evType, evCode);
                 
-                if(codeName == NULL) continue;
-                cout << "\t" << codeName << endl;
+                if(codeName == NULL) cout << "\t" << evCode << endl;
+                else cout << "\t" << codeName << endl;
             }
         }
     }

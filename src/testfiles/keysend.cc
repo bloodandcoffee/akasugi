@@ -10,7 +10,6 @@ int main() {
     libevdev *dev = libevdev_new();
     
     libevdev_set_name(dev, "Karatsuba Labs Co., Ltd. Akasugi Virtual Keyboard");
-    libevdev_set_uniq(dev, "2ac404ce-b02b-4911-a4ee-c37b77d45704");
     libevdev_set_id_vendor(dev, 0x6969);
     libevdev_set_id_product(dev, 0x510D);
     libevdev_set_id_bustype(dev, BUS_VIRTUAL);

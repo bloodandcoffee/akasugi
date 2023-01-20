@@ -18,11 +18,6 @@ EventInterceptor::InputDevice::InputDevice(char* path) {
         return;
     }
 
-    if(libevdev_grab(dev, LIBEVDEV_GRAB)) {
-        status = ID_STATUS_EVDEV_GRAB_FAILED;
-        return;
-    }
-
     status = ID_STATUS_OK;
 
 }
@@ -32,6 +27,16 @@ EventInterceptor::InputDevice::~InputDevice() {
     libevdev_grab(dev, LIBEVDEV_UNGRAB);
     libevdev_free(dev);
     close(fd);
+
+}
+
+void EventInterceptor::InputDevice::setGrab(bool c) {
+
+    if(libevdev_grab(dev, (c ? LIBEVDEV_GRAB : LIBEVDEV_UNGRAB))) {
+        status = ID_STATUS_EVDEV_GRAB_FAILED;
+    }
+
+    status = c ? ID_STATUS_GRABBED : ID_STATUS_OK;
 
 }
 

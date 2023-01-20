@@ -27,14 +27,17 @@ class EventInterceptor {
         libevdev* dev;
 
         #define ID_STATUS_OK 0
-        #define ID_STATUS_PATH_DNE 1
-        #define ID_STATUS_EVDEV_CREATE_FAILED 2
-        #define ID_STATUS_EVDEV_GRAB_FAILED 3
+        #define ID_STATUS_GRABBED 1
+        #define ID_STATUS_PATH_DNE 2
+        #define ID_STATUS_EVDEV_CREATE_FAILED 3
+        #define ID_STATUS_EVDEV_GRAB_FAILED 4
         char status;
 
         public:
         InputDevice(char* path);
         ~InputDevice();
+
+        void setGrab(bool c);
 
         int readEvent(struct input_event& e);
         DeviceSupportedEvents readSupportedEvents();
@@ -55,6 +58,16 @@ class EventInterceptor {
 
         void sendEvent(struct input_event e);
     };
+
+    static InputDevice id;
+    static OutputDevice od;
+
+    static bool isCapturing;
+
+    public:
+    static void init();
+    static void startCapture();
+    static void stopCapture();
 
 };
 

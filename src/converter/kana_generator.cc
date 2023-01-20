@@ -6,9 +6,9 @@ RomajiParser::State RomajiParser::startState;
 RomajiParser::State* RomajiParser::currentState;
 
 RomajiParser::State::~State() {
-    //for(map<char, State*>::iterator it = children.begin(); it != children.end(); it++) {
-    //    delete &it;
-    //}
+    for(map<char, State*>::iterator it = children.begin(); it != children.end(); it++) {
+        delete &it;
+    }
 }
 
 RomajiParser::State* RomajiParser::addStates(State* state, string transitions, const Kana* value) {

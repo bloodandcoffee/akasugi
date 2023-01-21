@@ -17,6 +17,7 @@ class EventInterceptor {
     };
 
     struct DeviceSupportedEvents {
+        bool initialized = false;
         std::vector<int> types;
         std::vector<std::vector<EventCode>> codes;
     };
@@ -26,6 +27,7 @@ class EventInterceptor {
         int fd;
         libevdev* dev;
 
+        #define ID_STATUS_UNITIALIZED -1
         #define ID_STATUS_OK 0
         #define ID_STATUS_GRABBED 1
         #define ID_STATUS_PATH_DNE 2
@@ -34,6 +36,7 @@ class EventInterceptor {
         char status;
 
         public:
+        InputDevice();
         InputDevice(char* path);
         ~InputDevice();
 
@@ -47,12 +50,14 @@ class EventInterceptor {
         libevdev* dev;
         libevdev_uinput* uidev;
 
+        #define OD_STATUS_UNITIALIZED -1
         #define OD_STATUS_OK 0
         #define OD_STATUS_EVDEV_SET_EVENTS_FAILED 1
         #define OD_STATUS_UINPUT_CREATE_FAILED 2
         char status;
 
         public:
+        OutputDevice();
         OutputDevice(DeviceSupportedEvents supportedEvents);
         ~OutputDevice();
 

@@ -9,6 +9,8 @@ using namespace std;
 
 int main() {
 
+    EventInterceptor::init();
+    EventInterceptor::startCapture();
 
     return 0;
 }

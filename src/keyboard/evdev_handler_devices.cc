@@ -5,6 +5,12 @@
 #include "evdev_handler.h"
 using namespace std;
 
+EventInterceptor::InputDevice::InputDevice() {
+
+    status = ID_STATUS_UNITIALIZED;
+
+}
+
 EventInterceptor::InputDevice::InputDevice(char* path) {
 
     fd = open(path, O_RDONLY);
@@ -24,13 +30,20 @@ EventInterceptor::InputDevice::InputDevice(char* path) {
 
 EventInterceptor::InputDevice::~InputDevice() {
 
-    libevdev_grab(dev, LIBEVDEV_UNGRAB);
+    if(status == ID_STATUS_UNITIALIZED) return;
+    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return;
+
+    if(status -= ID_STATUS_GRABBED) libevdev_grab(dev, LIBEVDEV_UNGRAB);
     libevdev_free(dev);
+
     close(fd);
 
 }
 
 void EventInterceptor::InputDevice::setGrab(bool c) {
+
+    if(status == ID_STATUS_UNITIALIZED) return;
+    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return;
 
     if(libevdev_grab(dev, (c ? LIBEVDEV_GRAB : LIBEVDEV_UNGRAB))) {
         status = ID_STATUS_EVDEV_GRAB_FAILED;
@@ -41,6 +54,9 @@ void EventInterceptor::InputDevice::setGrab(bool c) {
 }
 
 int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
+
+    if(status == ID_STATUS_UNITIALIZED) return -EINVAL;
+    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return -EINVAL;
 
     int rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, &e);
 
@@ -55,6 +71,9 @@ int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
 EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSupportedEvents() {
 
     EventInterceptor::DeviceSupportedEvents supportedEvents;
+
+    if(status == ID_STATUS_UNITIALIZED) return supportedEvents;
+    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return supportedEvents;
 
     for(int evType = 0; evType < EV_MAX; evType++) {
 
@@ -88,11 +107,24 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
         }
     }
 
+    supportedEvents.initialized = true;
+
     return supportedEvents;
 
 }
 
+EventInterceptor::OutputDevice::OutputDevice() {
+
+    status = ID_STATUS_UNITIALIZED;
+    
+}
+
 EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEvents supportedEvents) {
+
+    if(!supportedEvents.initialized) {
+        status = OD_STATUS_UNITIALIZED;
+        return;
+    }
 
     dev = libevdev_new();
 
@@ -134,12 +166,18 @@ EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEv
 
 EventInterceptor::OutputDevice::~OutputDevice() {
 
+    if(status == OD_STATUS_UNITIALIZED) return;
+    if(status == OD_STATUS_UINPUT_CREATE_FAILED) return;
+
     libevdev_uinput_destroy(uidev);
     libevdev_free(dev);
 
 }
 
 void EventInterceptor::OutputDevice::sendEvent(struct input_event e) {
+
+    if(status == OD_STATUS_UNITIALIZED) return;
+    if(status == OD_STATUS_UINPUT_CREATE_FAILED) return;
 
     libevdev_uinput_write_event(uidev, e.type, e.code, e.value);
 

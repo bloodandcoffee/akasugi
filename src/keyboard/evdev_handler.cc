@@ -5,6 +5,7 @@ using namespace std;
 
 EventInterceptor::InputDevice EventInterceptor::id;
 EventInterceptor::OutputDevice EventInterceptor::od;
+bool EventInterceptor::isCapturing;
 
 void EventInterceptor::init() {
 

@@ -61,7 +61,9 @@ int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
     int rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, &e);
 
     while (rc == LIBEVDEV_READ_STATUS_SYNC) {
+
         rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_SYNC, &e);
+        
     }
 
     return rc;
@@ -83,6 +85,7 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
         vector<EventCode> codes;
 
         for(int evCode = 0; evCode < typeMax; evCode++) {
+
             if(!libevdev_has_event_code(dev, evType, evCode)) continue;
             if(!libevdev_event_code_get_name(evType, evCode)) continue;
 
@@ -99,11 +102,14 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
             }
 
             codes.push_back(ec);
+
         }
 
         if(!codes.empty()) {
+
             supportedEvents.types.push_back(evType);
             supportedEvents.codes.push_back(codes);
+
         }
     }
 
@@ -136,18 +142,24 @@ EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEv
     bool setEventErr = false;
 
     for(int i = 0; i < supportedEvents.types.size(); i++) {
+
         int evType = supportedEvents.types.at(i);
         setEventErr = setEventErr || libevdev_enable_event_type(dev, evType);
 
         for(vector<EventCode>::iterator evCode = supportedEvents.codes.at(i).begin(); evCode < supportedEvents.codes.at(i).end(); evCode++) {
+            
             if(evType == EV_ABS) {
                 setEventErr = setEventErr || libevdev_enable_event_code(dev, evType, evCode->code, &evCode->absInfo);
             }
+
             else if(evType == EV_REP) {
                 setEventErr = setEventErr || libevdev_enable_event_code(dev, evType, evCode->code, &evCode->evRepVal);
             }
+
             else setEventErr = setEventErr || libevdev_enable_event_code(dev, evType, evCode->code, NULL);
+
         }
+
     }
 
     if(setEventErr) {

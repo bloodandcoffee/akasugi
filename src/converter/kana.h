@@ -3,16 +3,21 @@
 #include <string>
 
 struct Kana {
+
     std::string hiragana;
     std::string katakana;
+
 };
 
 struct Mapping {
+
     std::string romaji;
     const Kana* kana;
+
 };
 
 const Kana standard[] = {
+
     {"あ", "ア"},
     {"い", "イ"},
     {"う", "ウ"},
@@ -71,9 +76,11 @@ const Kana standard[] = {
     {"を", "ヲ"},
 
     {"ん", "ン"}
+
 };
 
 const Kana dakuon[] = {
+
     {"が", "ガ"},
     {"ぎ", "ギ"},
     {"ぐ", "グ"},
@@ -103,9 +110,11 @@ const Kana dakuon[] = {
     {"ぷ", "プ"},
     {"ぺ", "ペ"},
     {"ぽ", "ポ"}
+
 };
 
 const Kana youon[] = {
+
     {"きゃ", "キャ"},
     {"きゅ", "キュ"},
     {"きょ", "キョ"},
@@ -149,9 +158,11 @@ const Kana youon[] = {
     {"ぴゃ", "ピャ"},
     {"ぴゅ", "ピュ"},
     {"ぴょ", "ピュ"}
+
 };
 
 const Kana combination[] = {
+
     {"ふぁ", "ファ"},
     {"ゔぁ", "ヴァ"},
     {"つぁ", "ツァ"},
@@ -184,9 +195,11 @@ const Kana combination[] = {
     {"ぐゎ", "グヮ"},
     {"ぐぃ", "グィ"},
     {"ぐぇ", "グェ"}
+
 };
 
 const Kana chiisai[] = {
+
     {"ぁ", "ァ"},
     {"ぃ", "ィ"},
     {"ぅ", "ゥ"},
@@ -196,9 +209,11 @@ const Kana chiisai[] = {
     {"っ", "ッ"},
     {"ゕ", "ヵ"},
     {"ゖ", "ヶ"}
+
 };
 
 const Mapping kana[] = {
+
     // Normal Kana
     {"a", &standard[0]},
     {"i", &standard[1]},
@@ -374,10 +389,12 @@ const Mapping kana[] = {
     {"gwa", &combination[24]},
     {"gwi", &combination[25]},
     {"gwe", &combination[26]}
+
 };
 
 // x/l + kana = chiisai
 const Mapping chiisaiKana[] = {
+
     {"a", &chiisai[0]},
     {"i", &chiisai[1]},
     {"u", &chiisai[2]},
@@ -387,6 +404,7 @@ const Mapping chiisaiKana[] = {
     {"tsu", &chiisai[6]},
     {"ka", &chiisai[7]},
     {"ke", &chiisai[8]}
+    
 };
 
 #endif

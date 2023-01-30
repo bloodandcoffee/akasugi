@@ -5,13 +5,16 @@
 #include "kana.h"
 
 class RomajiParser {
+
     struct State {
+
         const Kana* value;
         std::map<char, State*> children;
 
         State() : value{nullptr} {};
         State(const Kana* value) : value{value} {};
         ~State();
+
     };
 
     static State startState;
@@ -24,6 +27,7 @@ class RomajiParser {
     static bool isLeaf();
     static const Kana* getValue();
     static void reset();
+    
 };
 
 #endif

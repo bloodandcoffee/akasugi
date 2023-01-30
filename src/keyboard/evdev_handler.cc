@@ -16,6 +16,7 @@ void EventInterceptor::init() {
 }
 
 void EventInterceptor::startCapture() {
+    
     isCapturing = true;
 
     id.setGrab(true);

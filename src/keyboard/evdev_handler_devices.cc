@@ -1,3 +1,4 @@
+#include <iostream>
 #include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
@@ -7,33 +8,38 @@ using namespace std;
 
 EventInterceptor::InputDevice::InputDevice() {
 
-    status = ID_STATUS_UNITIALIZED;
+    status = UNINITIALIZED;
+    dev = NULL;
 
 }
 
 EventInterceptor::InputDevice::InputDevice(char* path) {
+    
+    dev = NULL;
 
     fd = open(path, O_RDONLY);
     if(fd < 0) {
-        status = ID_STATUS_PATH_DNE;
+        cerr << "ERROR: Failed to read input device. Are you running as root?\n";
+
+        status = OPEN_DEVICE_FAILED;
         return;
     }
 
     if(libevdev_new_from_fd(fd, &dev) != 0) {
-        status = ID_STATUS_EVDEV_CREATE_FAILED;
+        status = CREATE_DEVICE_FAILED;
         return;
     }
 
-    status = ID_STATUS_OK;
+    status = OK;
 
 }
 
 EventInterceptor::InputDevice::~InputDevice() {
 
-    if(status == ID_STATUS_UNITIALIZED) return;
-    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return;
+    if(status == UNINITIALIZED) return;
+    if(status == CREATE_DEVICE_FAILED) return;
 
-    if(status -= ID_STATUS_GRABBED) libevdev_grab(dev, LIBEVDEV_UNGRAB);
+    if(status == GRABBED) libevdev_grab(dev, LIBEVDEV_UNGRAB);
     libevdev_free(dev);
 
     close(fd);
@@ -42,21 +48,21 @@ EventInterceptor::InputDevice::~InputDevice() {
 
 void EventInterceptor::InputDevice::setGrab(bool c) {
 
-    if(status == ID_STATUS_UNITIALIZED) return;
-    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return;
+    if(status == UNINITIALIZED) return;
+    if(status == CREATE_DEVICE_FAILED) return;
 
     if(libevdev_grab(dev, (c ? LIBEVDEV_GRAB : LIBEVDEV_UNGRAB))) {
-        status = ID_STATUS_EVDEV_GRAB_FAILED;
+        status = GRAB_FAILED;
     }
 
-    status = c ? ID_STATUS_GRABBED : ID_STATUS_OK;
+    status = c ? GRABBED : OK;
 
 }
 
 int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
 
-    if(status == ID_STATUS_UNITIALIZED) return -EINVAL;
-    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return -EINVAL;
+    if(status == UNINITIALIZED) return -EINVAL;
+    if(status == CREATE_DEVICE_FAILED) return -EINVAL;
 
     int rc = libevdev_next_event(dev, LIBEVDEV_READ_FLAG_NORMAL, &e);
 
@@ -74,8 +80,8 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
 
     EventInterceptor::DeviceSupportedEvents supportedEvents;
 
-    if(status == ID_STATUS_UNITIALIZED) return supportedEvents;
-    if(status == ID_STATUS_EVDEV_CREATE_FAILED) return supportedEvents;
+    if(status == UNINITIALIZED) return supportedEvents;
+    if(status == CREATE_DEVICE_FAILED) return supportedEvents;
 
     for(int evType = 0; evType < EV_MAX; evType++) {
 
@@ -121,14 +127,19 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
 
 EventInterceptor::OutputDevice::OutputDevice() {
 
-    status = ID_STATUS_UNITIALIZED;
+    status = UNINITIALIZED;
+    dev = NULL;
+    uidev = NULL;
     
 }
 
 EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEvents supportedEvents) {
 
+    dev = NULL;
+    uidev = NULL;
+
     if(!supportedEvents.initialized) {
-        status = OD_STATUS_UNITIALIZED;
+        status = UNINITIALIZED;
         return;
     }
 
@@ -163,23 +174,23 @@ EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEv
     }
 
     if(setEventErr) {
-        status = OD_STATUS_EVDEV_SET_EVENTS_FAILED;
+        status = SET_EVENTS_FAILED;
         return;
     }
 
     if(libevdev_uinput_create_from_device(dev, LIBEVDEV_UINPUT_OPEN_MANAGED, &uidev)) {
-        status = OD_STATUS_UINPUT_CREATE_FAILED;
+        status = CREATE_DEVICE_FAILED;
         return;
     }
 
-    status = OD_STATUS_OK;
+    status = OK;
 
 }
 
 EventInterceptor::OutputDevice::~OutputDevice() {
 
-    if(status == OD_STATUS_UNITIALIZED) return;
-    if(status == OD_STATUS_UINPUT_CREATE_FAILED) return;
+    if(status == UNINITIALIZED) return;
+    if(status == CREATE_DEVICE_FAILED) return;
 
     libevdev_uinput_destroy(uidev);
     libevdev_free(dev);
@@ -188,8 +199,8 @@ EventInterceptor::OutputDevice::~OutputDevice() {
 
 void EventInterceptor::OutputDevice::sendEvent(struct input_event e) {
 
-    if(status == OD_STATUS_UNITIALIZED) return;
-    if(status == OD_STATUS_UINPUT_CREATE_FAILED) return;
+    if(status == UNINITIALIZED) return;
+    if(status == CREATE_DEVICE_FAILED) return;
 
     libevdev_uinput_write_event(uidev, e.type, e.code, e.value);
 

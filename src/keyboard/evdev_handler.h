@@ -2,13 +2,24 @@
 #define evdev_HANDLER_H
 
 #include <vector>
-
 #include <linux/input.h>
 #include <libevdev/libevdev.h>
 #include <libevdev/libevdev-uinput.h>
 
 class EventInterceptor {
 
+    public:
+    enum DeviceState {
+        OK,
+        UNINITIALIZED,
+        GRABBED,
+        OPEN_DEVICE_FAILED,
+        SET_EVENTS_FAILED,
+        CREATE_DEVICE_FAILED,
+        GRAB_FAILED
+    };
+
+    private:
     struct EventCode {
         int type;
         int code;
@@ -27,15 +38,9 @@ class EventInterceptor {
         int fd;
         libevdev* dev;
 
-        #define ID_STATUS_UNITIALIZED -1
-        #define ID_STATUS_OK 0
-        #define ID_STATUS_GRABBED 1
-        #define ID_STATUS_PATH_DNE 2
-        #define ID_STATUS_EVDEV_CREATE_FAILED 3
-        #define ID_STATUS_EVDEV_GRAB_FAILED 4
-        char status;
-
         public:
+        DeviceState status;
+
         InputDevice();
         InputDevice(char* path);
         ~InputDevice();
@@ -50,13 +55,10 @@ class EventInterceptor {
         libevdev* dev;
         libevdev_uinput* uidev;
 
-        #define OD_STATUS_UNITIALIZED -1
-        #define OD_STATUS_OK 0
-        #define OD_STATUS_EVDEV_SET_EVENTS_FAILED 1
-        #define OD_STATUS_UINPUT_CREATE_FAILED 2
-        char status;
 
         public:
+        DeviceState status;
+
         OutputDevice();
         OutputDevice(DeviceSupportedEvents supportedEvents);
         ~OutputDevice();
@@ -70,6 +72,8 @@ class EventInterceptor {
     static bool isCapturing;
 
     public:
+    static DeviceState status;
+    
     static void init();
     static void startCapture();
     static void stopCapture();

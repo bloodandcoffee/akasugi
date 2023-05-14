@@ -1,5 +1,5 @@
-#ifndef KANA_H
-#define KANA_H
+#ifndef KANA_MAPPING_H
+#define KANA_MAPPING_H
 #include <string>
 
 struct Kana {

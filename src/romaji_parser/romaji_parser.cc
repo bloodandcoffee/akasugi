@@ -1,6 +1,6 @@
 #include <string>
 
-#include "kana_generator.h"
+#include "romaji_parser.h"
 using namespace std;
 
 RomajiParser::State RomajiParser::startState;

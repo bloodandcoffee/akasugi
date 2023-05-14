@@ -6,7 +6,7 @@
 #include <libevdev/libevdev.h>
 #include <libevdev/libevdev-uinput.h>
 
-class EventInterceptor {
+class EventHandler {
 
     public:
     enum DeviceState {

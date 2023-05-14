@@ -2,7 +2,7 @@
 #define KANA_GENERATOR_H
 #include <vector>
 #include <map>
-#include "kana.h"
+#include "kana_mapping.h"
 
 class RomajiParser {
 

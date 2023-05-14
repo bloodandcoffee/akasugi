@@ -1,17 +1,17 @@
 #include <iostream>
 #include <errno.h>
 
-#include "evdev_handler.h"
+#include "event_handler.h"
 using namespace std;
 
-EventInterceptor::InputDevice EventInterceptor::id;
-EventInterceptor::OutputDevice EventInterceptor::od;
-bool EventInterceptor::isCapturing;
-EventInterceptor::DeviceState EventInterceptor::status;
+EventHandler::InputDevice EventHandler::id;
+EventHandler::OutputDevice EventHandler::od;
+bool EventHandler::isCapturing;
+EventHandler::DeviceState EventHandler::status;
 
-void EventInterceptor::init() {
+void EventHandler::init() {
 
-    id = EventInterceptor::InputDevice("/dev/input/event4");
+    id = EventHandler::InputDevice("/dev/input/event4");
 
     if(id.status != OK) {
 
@@ -21,7 +21,7 @@ void EventInterceptor::init() {
     }
 
 
-    od = EventInterceptor::OutputDevice(id.readSupportedEvents());
+    od = EventHandler::OutputDevice(id.readSupportedEvents());
 
     if(od.status != OK) {
 
@@ -34,7 +34,7 @@ void EventInterceptor::init() {
     startCapture();
 }
 
-void EventInterceptor::startCapture() {
+void EventHandler::startCapture() {
     
     if(status != OK) return;
 
@@ -54,7 +54,7 @@ void EventInterceptor::startCapture() {
 
 }
 
-void EventInterceptor::stopCapture() {
+void EventHandler::stopCapture() {
 
     isCapturing = false;
     id.setGrab(false);

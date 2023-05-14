@@ -2,15 +2,15 @@
 #include <sstream>
 #include <string>
 
-#include "converter/kana_generator.h"
-#include "keyboard/evdev_handler.h"
+#include "romaji_parser/romaji_parser.h"
+#include "evdev/event_handler.h"
 
 using namespace std;
 
 int main() {
 
-    EventInterceptor::init();
-    EventInterceptor::startCapture();
+    EventHandler::init();
+    EventHandler::startCapture();
 
     return 0;
 }

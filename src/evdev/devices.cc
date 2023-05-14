@@ -3,17 +3,17 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "evdev_handler.h"
+#include "event_handler.h"
 using namespace std;
 
-EventInterceptor::InputDevice::InputDevice() {
+EventHandler::InputDevice::InputDevice() {
 
     status = UNINITIALIZED;
     dev = NULL;
 
 }
 
-EventInterceptor::InputDevice::InputDevice(char* path) {
+EventHandler::InputDevice::InputDevice(char* path) {
     
     dev = NULL;
 
@@ -34,7 +34,7 @@ EventInterceptor::InputDevice::InputDevice(char* path) {
 
 }
 
-EventInterceptor::InputDevice::~InputDevice() {
+EventHandler::InputDevice::~InputDevice() {
 
     if(status == UNINITIALIZED) return;
     if(status == CREATE_DEVICE_FAILED) return;
@@ -46,7 +46,7 @@ EventInterceptor::InputDevice::~InputDevice() {
 
 }
 
-void EventInterceptor::InputDevice::setGrab(bool c) {
+void EventHandler::InputDevice::setGrab(bool c) {
 
     if(status == UNINITIALIZED) return;
     if(status == CREATE_DEVICE_FAILED) return;
@@ -59,7 +59,7 @@ void EventInterceptor::InputDevice::setGrab(bool c) {
 
 }
 
-int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
+int EventHandler::InputDevice::readEvent(struct input_event& e) {
 
     if(status == UNINITIALIZED) return -EINVAL;
     if(status == CREATE_DEVICE_FAILED) return -EINVAL;
@@ -76,9 +76,9 @@ int EventInterceptor::InputDevice::readEvent(struct input_event& e) {
 
 }
 
-EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSupportedEvents() {
+EventHandler::DeviceSupportedEvents EventHandler::InputDevice::readSupportedEvents() {
 
-    EventInterceptor::DeviceSupportedEvents supportedEvents;
+    EventHandler::DeviceSupportedEvents supportedEvents;
 
     if(status == UNINITIALIZED) return supportedEvents;
     if(status == CREATE_DEVICE_FAILED) return supportedEvents;
@@ -125,7 +125,7 @@ EventInterceptor::DeviceSupportedEvents EventInterceptor::InputDevice::readSuppo
 
 }
 
-EventInterceptor::OutputDevice::OutputDevice() {
+EventHandler::OutputDevice::OutputDevice() {
 
     status = UNINITIALIZED;
     dev = NULL;
@@ -133,7 +133,7 @@ EventInterceptor::OutputDevice::OutputDevice() {
     
 }
 
-EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEvents supportedEvents) {
+EventHandler::OutputDevice::OutputDevice(EventHandler::DeviceSupportedEvents supportedEvents) {
 
     dev = NULL;
     uidev = NULL;
@@ -187,7 +187,7 @@ EventInterceptor::OutputDevice::OutputDevice(EventInterceptor::DeviceSupportedEv
 
 }
 
-EventInterceptor::OutputDevice::~OutputDevice() {
+EventHandler::OutputDevice::~OutputDevice() {
 
     if(status == UNINITIALIZED) return;
     if(status == CREATE_DEVICE_FAILED) return;
@@ -197,7 +197,7 @@ EventInterceptor::OutputDevice::~OutputDevice() {
 
 }
 
-void EventInterceptor::OutputDevice::sendEvent(struct input_event e) {
+void EventHandler::OutputDevice::sendEvent(struct input_event e) {
 
     if(status == UNINITIALIZED) return;
     if(status == CREATE_DEVICE_FAILED) return;

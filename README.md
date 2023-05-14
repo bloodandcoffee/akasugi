@@ -2,16 +2,34 @@
 
 # 赤杉 akasugi
 
-A Japanese IME for Wayland desktops
+**akasugi** is a simple Japanese input method for Wayland compositors
+
+[![GPLv3](https://img.shields.io/badge/license-GPLv3-green)](#)
 
 </div>
 
-**akasugi** is a simple Japanese input method for Wayland compositors. It is currently in development
 
+### USAGE
 
-## Building
+    sudo akasugi
 
-> make
+### DEPENDENCIES
+
+- libevdev
+
+### INSTALLING
+
+Compile
+
+    make
+
+Install
+
+    make install
+
+Uninstall
+
+    make remove
 
 
 ## To-Do list

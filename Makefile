@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++20 -Wall -MMD -O2 -mtune=znver3 -I /usr/include/libevdev-1.0 -levdev
+CXXFLAGS=-std=c++20 -Wall -MMD -O2 -mtune=native -I /usr/include/libevdev-1.0 -levdev
 EXEC=bin/akasugi
 OBJECTS=src/main.o src/romaji_parser/romaji_parser.o src/evdev/event_handler.o src/evdev/devices.o
 DEPENDS=${OBJECTS:.o=.d}

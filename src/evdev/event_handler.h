@@ -1,10 +1,14 @@
-#ifndef evdev_HANDLER_H
-#define evdev_HANDLER_H
+#ifndef EVDEV_HANDLER_H
+#define EVDEV_HANDLER_H
 
 #include <vector>
 #include <linux/input.h>
 #include <libevdev/libevdev.h>
 #include <libevdev/libevdev-uinput.h>
+
+
+// List of Modifier Keys
+const int modifierKeys[] = {KEY_LEFTCTRL, KEY_LEFTALT, KEY_LEFTMETA, KEY_RIGHTALT, KEY_RIGHTCTRL, KEY_RIGHTMETA};
 
 class EventHandler {
 

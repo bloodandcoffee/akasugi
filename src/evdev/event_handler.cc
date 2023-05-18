@@ -6,6 +6,7 @@
 #include "../akasugi/akasugi.h"
 using namespace std;
 
+
 EventHandler::InputDevice EventHandler::id;
 EventHandler::OutputDevice EventHandler::od;
 bool EventHandler::isCapturing;
@@ -53,10 +54,10 @@ void EventHandler::startCapture() {
         else if(e.type == EV_KEY) {
             
             // Pass toggle control sequence mode for control, alt, and super keys
-            if(find(&modifierKeys, &modifierKeys + 6, e.code) != (&modifierKeys + 6)) akasugi.setModifierIsPressed(e.value);
+            if(find(modifierKeys, (modifierKeys + 6), e.code) != (modifierKeys + 6)) Akasugi.setModifierIsPressed(e.value);
 
             // Pass through all key events when modifier keys are pressed
-            else if(akasugi.getModifierIsPressed()) else od.sendEvent(e);
+            else if(Akasugi.getModifierIsPressed()) else od.sendEvent(e);
 
             // Ignore keyup events
             else if(e.value == 0) continue;
@@ -66,16 +67,16 @@ void EventHandler::startCapture() {
             else if(e.code == KEY_CAPSLOCK) {
 
                 // Toggle JP mode on Caps Lock press
-                if(e.value == 1) akasugi.toggleEnglishMode();
+                if(e.value == 1) Akasugi.toggleEnglishMode();
                 // Ignore/pass through all other caps lock events
                 else od.sendEvent(e);
 
             }
 
             // Send latin alphabet and punctuation events to JP keyboard
-            else if(akasugi.accepts(e.code)){
+            else if(Akasugi.accepts(e.code)){
 
-                akasugi.onGetKeyboardInput(e.code);
+                Akasugi.onGetKeyboardInput(e.code);
 
             }
 

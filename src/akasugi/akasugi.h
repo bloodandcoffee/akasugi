@@ -2,7 +2,7 @@
 #define AKASUGI_H
 
 
-class akasugi {
+class Akasugi {
 
     public:
 

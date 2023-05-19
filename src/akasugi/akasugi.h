@@ -10,8 +10,10 @@ class Akasugi {
 
     static bool isJapaneseMode;
     static bool isModPressed;
+    static bool isShiftPressed;
 
     static void consumeKeyboardInput(int keycode);
+    static void sendSymbol(int symbol);
 
 
     public:

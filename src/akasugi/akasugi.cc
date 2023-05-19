@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <iostream>
 
 #include "akasugi.h"
 using namespace std;
@@ -8,6 +9,7 @@ void Akasugi::init() {
 
     isJapaneseMode = true;
     isModPressed = false;
+    isShiftPressed = false;
 
 }
 
@@ -17,10 +19,18 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
     // Check if a modifier key is being pressed, or if JP mode is off
     if(isModPressed || isJapaneseMode == false) return false;
 
-    // Pass toggle control sequence mode for control, alt, and super keys
+    // Pass through control, alt, and super keys
     if(find(modifierKeys, (modifierKeys + 6), code) != (modifierKeys + 6)) {
         
         isModPressed = value;
+        return false;
+
+    }
+
+    // Pass through shift key presses
+    if(code == KEY_LEFTSHIFT || code == KEY_RIGHTSHIFT) {
+
+        isShiftPressed = value;
         return false;
 
     }
@@ -38,9 +48,54 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
 
     }
 
-    // TODO: Check if key is a romaji or punctuation
+    // TODO: PROPERLY OUTPUT SYMBOLS INSTEAD OF PRINTING TO STDOUT
+
+    // Output japanese punctuations
+    // More JP punctuations may be added later. For now, this keyboard is meant to be convenient for gaijins
+    if(code == KEY_4 && isShiftPressed) {
+
+        sendSymbol('¥');
+        return true;
+
+    } else if(code == KEY_DOT) {
+
+        sendSymbol('。');
+        return true;
+
+    } else if(code == KEY_COMMA) {
+
+        sendSymbol('、');
+        return true;
+
+    }
+
+    // Consume and process romaji key inputs
+    if(code >= KEY_Q && code <= KEY_P ||
+        code >= KEY_A && code <= KEY_L ||
+        code >= KEY_Z && code <= KEY_M) {
+
+        consumeKeyboardInput(code);
+        return true;
+
+    }
     
 
-    return true;
+    return false;
+
+}
+
+void Akasugi::sendSymbol(int symbol) {
+
+    // Should actually send it to output instead of terminal
+    // This is just for temporary debugging
+    cout << (char)symbol;
+
+}
+
+void Akasugi::consumeKeyboardInput(int keycode) {
+
+    // Should actually send it to romaji parser
+    // This is just a placeholder
+    cout << (char)keycode;
 
 }

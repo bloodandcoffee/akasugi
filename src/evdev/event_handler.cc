@@ -8,8 +8,8 @@ using namespace std;
 
 EventHandler::InputDevice EventHandler::id;
 EventHandler::OutputDevice EventHandler::od;
-bool EventHandler::isCapturing;
 EventHandler::DeviceState EventHandler::status;
+bool EventHandler::isCapturing;
 
 void EventHandler::init() {
 
@@ -22,7 +22,6 @@ void EventHandler::init() {
 
     }
 
-
     od = EventHandler::OutputDevice(id.readSupportedEvents());
 
     if(od.status != OK) {
@@ -34,6 +33,7 @@ void EventHandler::init() {
 
     status = OK;
     startCapture();
+
 }
 
 void EventHandler::startCapture() {

@@ -7,9 +7,6 @@
 #include <libevdev/libevdev-uinput.h>
 
 
-// List of Modifier Keys
-const int modifierKeys[] = {KEY_LEFTCTRL, KEY_LEFTALT, KEY_LEFTMETA, KEY_RIGHTALT, KEY_RIGHTCTRL, KEY_RIGHTMETA};
-
 class EventHandler {
 
     public:
@@ -58,7 +55,6 @@ class EventHandler {
     class OutputDevice {
         libevdev* dev;
         libevdev_uinput* uidev;
-
 
         public:
         DeviceState status;

@@ -5,6 +5,10 @@
 using namespace std;
 
 
+bool Akasugi::isJapaneseMode;
+bool Akasugi::isModPressed;
+bool Akasugi::isShiftPressed;
+
 void Akasugi::init() {
 
     isJapaneseMode = true;

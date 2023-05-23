@@ -32,9 +32,12 @@ Uninstall
     make remove
 
 
-## To-Do list
+## TODO
+- [ ] Switch NFA to DFA
 
-- [ ] Test libevdev-based keyboard capture system
-- [ ] Research methods to send back kana/kanji output
-- [ ] Implement kanji/katakana generation
-- [ ] Create frontend options for Wayland (swaybar module?)
+## Waypoints
+
+- [ ] Romaji->Hiragana w/ KBD capture
+- [ ] Hiragana->Katakana/Kanji
+- [ ] Wayland input-method-v2 protocol
+- [ ] Wayland visual display

@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "akasugi.h"
+#include "../romaji_parser/romaji_parser.h"
 using namespace std;
 
 
@@ -40,7 +41,7 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
     }
 
     // Ignore keyup events
-    if(value == 0) false;
+    if(value == 0) return false;
 
     // Use Caps Lock to toggle between JP and EN
     // Toggle Japanese Mode for single press, pass through event for autorepeat events
@@ -58,17 +59,17 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
     // More JP punctuations may be added later. For now, this keyboard is meant to be convenient for gaijins
     if(code == KEY_4 && isShiftPressed) {
 
-        sendSymbol('¥');
+        sendSymbol("¥");
         return true;
 
     } else if(code == KEY_DOT) {
 
-        sendSymbol('。');
+        sendSymbol("。");
         return true;
 
     } else if(code == KEY_COMMA) {
 
-        sendSymbol('、');
+        sendSymbol("、");
         return true;
 
     }
@@ -88,18 +89,38 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
 
 }
 
-void Akasugi::sendSymbol(int symbol) {
 
-    // Should actually send it to output instead of terminal
-    // This is just for temporary debugging
-    cout << (char)symbol;
+// Convert keycodes to lowercase ASCII
+char Akasugi::getAscii(int code) {
+
+    if(!keyMap.contains(code)) return 0;
+    else return keyMap.at(code);
 
 }
 
-void Akasugi::consumeKeyboardInput(int keycode) {
+// Send a unicode symbol to output
+void Akasugi::sendSymbol(string symbol) {
 
-    // Should actually send it to romaji parser
-    // This is just a placeholder
-    cout << (char)keycode;
+    // Should actually send it to output instead of terminal
+    // This is just for temporary debugging
+    cout << symbol;
+
+}
+
+// Sends the romaji to the DFA - this expects a valid ASCII character
+void Akasugi::consumeKeyboardInput(int keycode) {
+    
+    char ascii = getAscii(keycode);
+
+    if(ascii == 0) return;
+    else RomajiParser::consumeChar(ascii);
+
+    // After sending input, check if a valid kana is available for output
+    if(RomajiParser::isLeaf()) {
+        
+        sendSymbol(RomajiParser::getValue()->hiragana);
+        RomajiParser::reset();
+
+    }
 
 }

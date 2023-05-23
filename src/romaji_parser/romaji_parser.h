@@ -23,8 +23,8 @@ class RomajiParser {
 
     public:
     static void init();
-    static bool consumeChar(char c);
     static bool isLeaf();
+    static bool consumeChar(char c);
     static const Kana* getValue();
     static void reset();
     

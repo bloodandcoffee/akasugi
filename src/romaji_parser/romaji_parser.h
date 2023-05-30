@@ -13,8 +13,7 @@ class RomajiParser {
 
         State() : value{nullptr} {};
         State(const Kana* value) : value{value} {};
-        ~State();
-
+        
     };
 
     static State startState;

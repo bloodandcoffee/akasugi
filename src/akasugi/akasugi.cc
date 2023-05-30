@@ -75,9 +75,9 @@ bool Akasugi::onGetKeyboardInput(int code, int value) {
     }
 
     // Consume and process romaji key inputs
-    if(code >= KEY_Q && code <= KEY_P ||
-        code >= KEY_A && code <= KEY_L ||
-        code >= KEY_Z && code <= KEY_M) {
+    if((code >= KEY_Q && code <= KEY_P) ||
+        (code >= KEY_A && code <= KEY_L) ||
+        (code >= KEY_Z && code <= KEY_M)) {
 
         consumeKeyboardInput(code);
         return true;

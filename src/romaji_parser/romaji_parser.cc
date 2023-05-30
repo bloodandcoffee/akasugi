@@ -6,13 +6,6 @@ using namespace std;
 RomajiParser::State RomajiParser::startState;
 RomajiParser::State* RomajiParser::currentState;
 
-RomajiParser::State::~State() {
-
-    for(map<char, State*>::iterator it = children.begin(); it != children.end(); it++) {
-        delete &it;
-    }
-
-}
 
 RomajiParser::State* RomajiParser::addStates(State* state, string transitions, const Kana* value) {
 
@@ -38,7 +31,7 @@ void RomajiParser::init() {
     currentState = &startState;
 
     // Create all normal kana
-    for(int i = 0; i < (sizeof(kana) / sizeof(Mapping)); i++) {
+    for(int i = 0; i < (int)(sizeof(kana) / sizeof(Mapping)); i++) {
         addStates(&startState, kana[i].romaji, kana[i].kana);
     }
 
@@ -47,7 +40,7 @@ void RomajiParser::init() {
     State* l = addStates(&startState, "l", nullptr);
 
     // Create chiisai kana
-    for(int i = 0; i < (sizeof(chiisaiKana) / sizeof(Mapping)); i++) {
+    for(int i = 0; i < (int)(sizeof(chiisaiKana) / sizeof(Mapping)); i++) {
         addStates(x, chiisaiKana[i].romaji, chiisaiKana[i].kana);
     }
 

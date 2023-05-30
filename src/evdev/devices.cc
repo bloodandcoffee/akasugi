@@ -152,7 +152,7 @@ EventHandler::OutputDevice::OutputDevice(EventHandler::DeviceSupportedEvents sup
 
     bool setEventErr = false;
 
-    for(int i = 0; i < supportedEvents.types.size(); i++) {
+    for(int i = 0; i < (int)supportedEvents.types.size(); i++) {
 
         int evType = supportedEvents.types.at(i);
         setEventErr = setEventErr || libevdev_enable_event_type(dev, evType);
